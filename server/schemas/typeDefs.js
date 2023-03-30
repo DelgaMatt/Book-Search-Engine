@@ -14,7 +14,6 @@ type User {
     savedBooks: [Book]
 }
 
-
 type Book {
     bookId: ID!
     authors: [String]!
