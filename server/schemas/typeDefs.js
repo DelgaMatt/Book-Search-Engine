@@ -16,7 +16,7 @@ type User {
 
 
 type Book {
-    bookID: ID!
+    bookId: ID!
     authors: [String]!
     description: String!
     title: String!
@@ -25,7 +25,7 @@ type Book {
 }
 
 input BookInput {
-    bookID: ID!
+    bookId: ID!
     authors: [String]!
     description: String!
     title: String!
