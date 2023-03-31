@@ -7,7 +7,6 @@ import {
   Col
 } from 'react-bootstrap';
 
-
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
 
@@ -73,6 +72,7 @@ const SavedBooks = () => {
 
       // const updatedUser = await response.json();
       // setUserData(updatedUser);
+
       // upon success, remove book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
