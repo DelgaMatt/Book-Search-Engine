@@ -4,8 +4,16 @@ const { signToken } = require('../utils/auth');
 
 const resolvers = {
     Query: {
-        me: async (parent, {email}) => {
-            return User.findOne({email: email}).populate('savedBooks');
+        me: async (parent, args, context) => {
+            if (context.user) {
+                const userData = await User
+                .findOne({_id: context.user._id })
+                .populate('books')
+                .select('-__v -password');
+
+                return userData;
+            }
+            throw new AuthenticationError('You must be logged in!')
         },
     },
 
@@ -21,7 +29,7 @@ const resolvers = {
             return { token, user }; 
         },
         login: async (parent, {email, password}) => {
-            const user = User.findOne({email});
+            const user = await User.findOne({email});
 
             if (!user) {
                 throw new AuthenticationError('No user found with this email address');
@@ -30,7 +38,7 @@ const resolvers = {
             const correctPW =  await user.isCorrectPassword(password);
 
             if (!correctPW) {
-                throw new AuthenticationError('Incorrect credentials')
+                throw new AuthenticationError('Incorrect credentials');
             };
 
             const token = signToken(user);
@@ -43,7 +51,7 @@ const resolvers = {
                     { $addToSet: { savedBooks: bookData }},
                     { new: true }
                 )
-                .populate('Books');
+                .populate('books');
 
                 return user;
             }
