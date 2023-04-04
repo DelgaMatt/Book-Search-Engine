@@ -8,7 +8,7 @@ const resolvers = {
             if (context.user) {
                  const userData = await User
                 .findOne({_id: context.user._id })
-                .populate('books')
+          
                 .select('-__v -password');
 
                 return userData;
@@ -20,7 +20,7 @@ const resolvers = {
     Mutation: {
         addUser: async (parent, {username, email, password}) => {
             const user = await User.create({username, email, password});
-
+            
             if (!username || !email || !password) {
                 throw new Error('Please enter a username, email, and password');
             };
@@ -58,7 +58,7 @@ const resolvers = {
         },
         removeBook: async (parent, { bookId }, context) => {
             if (context.user) {
-                const user = await User.findOneAndDelete(
+                const user = await User.findOneAndUpdate(
                     { _id: context.user._id },
                     { $pull: { savedBooks: { bookId }}},
                     { new: true }
